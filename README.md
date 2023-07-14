@@ -9,7 +9,7 @@ Enter your FiveM script directory.
 
 Script show you all your posible triggers..
 
-# !important
+# important
 Secure: yes use only in small scripts or make backups.
 
 
