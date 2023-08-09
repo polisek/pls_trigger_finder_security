@@ -67,6 +67,8 @@ if not IS_SERVER then
         TriggerServerEvent("secure:server:eventGen", randomString, SERVER_PASSWORD)
         Wait(50)
         TriggerServerEvent(eventname, ...)
+        Wait(50)
+        TriggerServerEvent(SCRIPT_KEY_CLIENT.."secure:server:eventCHECK")
     end
 
     Wait(1000)
