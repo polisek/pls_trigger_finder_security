@@ -71,5 +71,4 @@ if not IS_SERVER then
 
     Wait(1000)
     TriggerServerEvent(SCRIPT_KEY_CLIENT.."secure:server:eventCHECK")
-    print(SCRIPT_KEY_CLIENT)
 end
