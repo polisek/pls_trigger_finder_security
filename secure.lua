@@ -2,8 +2,6 @@ local IS_SERVER = IsDuplicityVersion()
 
 if IS_SERVER then
     local SCRIPT_KEY_SERVER = GetCurrentResourceName()
-    print("NAČTENÍ SCRIPTU")
-    print(SCRIPT_KEY_SERVER)
 
     local SecurePlayers = {}
     local characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -50,7 +48,6 @@ if not IS_SERVER then
     RegisterNetEvent(SCRIPT_KEY_CLIENT.."secure:get:password")
     AddEventHandler(SCRIPT_KEY_CLIENT.."secure:get:password", function(password)
        SERVER_PASSWORD = password
-       print("Načetlo se")
     end)
 
     function generateRandomString(length)
