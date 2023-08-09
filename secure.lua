@@ -1,17 +1,36 @@
 local IS_SERVER = IsDuplicityVersion()
 
 if IS_SERVER then
+    local SCRIPT_KEY_SERVER = GetCurrentResourceName()
+    print("NAČTENÍ SCRIPTU")
+    print(SCRIPT_KEY_SERVER)
+
     local SecurePlayers = {}
+    local characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    local generatePass = ''
+    local charactersLength = string.len(characters)
+
+    for i = 1, 10 do
+        generatePass = generatePass .. string.sub(characters, math.random(1, charactersLength), 1)
+    end
 
     RegisterNetEvent("secure:server:eventGen")
-    AddEventHandler("secure:server:eventGen", function(randomString, timeStamp)
+    AddEventHandler("secure:server:eventGen", function(randomString, password)
         local src = source
-        SecurePlayers[src] = {randomString = randomString, timeStamp = os.time()}
+        if password == generatePass then
+            SecurePlayers[src] = {randomString = randomString, timeStamp = os.time()}
+        end
 
-        -- Automaticky zrušit platnost po jedné minutě
-        SetTimeout(60000, function()
+        -- Automaticky zrušit platnost po 6 vteřinách
+        SetTimeout(6000, function()
             SecurePlayers[src] = nil
         end)
+    end)
+
+    RegisterNetEvent(SCRIPT_KEY_SERVER.."secure:server:eventCHECK")
+    AddEventHandler(SCRIPT_KEY_SERVER.."secure:server:eventCHECK", function()
+        local src = source
+        TriggerClientEvent(SCRIPT_KEY_SERVER.."secure:get:password", src, generatePass)
     end)
 
     function CanTrustPlayer(source)
@@ -25,6 +44,15 @@ if IS_SERVER then
     end 
 end
 if not IS_SERVER then
+    local SCRIPT_KEY_CLIENT = GetCurrentResourceName()
+    local SERVER_PASSWORD
+
+    RegisterNetEvent(SCRIPT_KEY_CLIENT.."secure:get:password")
+    AddEventHandler(SCRIPT_KEY_CLIENT.."secure:get:password", function(password)
+       SERVER_PASSWORD = password
+       print("Načetlo se")
+    end)
+
     function generateRandomString(length)
         local characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         local result = ''
@@ -39,8 +67,12 @@ if not IS_SERVER then
     
     function TriggerSecureEvent(eventname, ...)
         local randomString = generateRandomString(10)
-        TriggerServerEvent("secure:server:eventGen", randomString, timeStamp)
+        TriggerServerEvent("secure:server:eventGen", randomString, SERVER_PASSWORD)
         Wait(50)
         TriggerServerEvent(eventname, ...)
     end
+
+    Wait(1000)
+    TriggerServerEvent(SCRIPT_KEY_CLIENT.."secure:server:eventCHECK")
+    print(SCRIPT_KEY_CLIENT)
 end
