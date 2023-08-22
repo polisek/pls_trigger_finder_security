@@ -1,5 +1,7 @@
 # pls_trigger_finder_security v.0.0.1
 
+Docs: https://polisek.io/documentation/docs/Developers/TriggerEvent%20security/shared/intro
+
 
 Run:
 ```
